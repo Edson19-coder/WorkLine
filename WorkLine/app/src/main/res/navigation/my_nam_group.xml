@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/my_nam_group"
+    app:startDestination="@id/muroFragment">
+
+    <fragment
+        android:id="@+id/muroFragment"
+        android:name="com.example.workline.MuroFragment"
+        android:label="fragment_muro"
+        tools:layout="@layout/fragment_muro" />
+    <fragment
+        android:id="@+id/groupChatFragment"
+        android:name="com.example.workline.GroupChatFragment"
+        android:label="fragment_group_chat"
+        tools:layout="@layout/fragment_group_chat" />
+    <fragment
+        android:id="@+id/membersFragment"
+        android:name="com.example.workline.MembersFragment"
+        android:label="fragment_members"
+        tools:layout="@layout/fragment_members" />
+</navigation>
