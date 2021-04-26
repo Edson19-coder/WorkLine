@@ -1,6 +1,7 @@
 package com.example.workline.fragments
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -8,6 +9,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.workline.ChatActivity
+import com.example.workline.HomeActivity
 import com.example.workline.R
 import com.example.workline.adapters.MessageAdapter
 import com.example.workline.modelos.Message
@@ -39,21 +42,7 @@ class MessagesFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        for(child in pathChild) {
-            auth = Firebase.auth
-            val email = auth.currentUser.email
-            chatsRef.orderByChild(child).equalTo(email).addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    for (snap in snapshot.children) {
-                        val message:Message = snap.getValue(Message::class.java) as Message
-                    }
-                }
 
-                override fun onCancelled(error: DatabaseError) {
-                    TODO("Not yet implemented")
-                }
-            })
-        }
     }
 
     override fun onCreateView(
@@ -72,7 +61,7 @@ class MessagesFragment : Fragment() {
         }
         listMessage.apply {
             layoutManager = LinearLayoutManager(activity)
-            adapter = MessageAdapter(messages)
+            adapter = MessageAdapter(act,messages)
         }
     }
 }
