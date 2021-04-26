@@ -48,7 +48,7 @@ class LoginActivity : AppCompatActivity() {
                 auth.signInWithEmailAndPassword(editTextLoginEmail.text.toString(), editTextLoginPassword.text.toString())
                     .addOnCompleteListener { task ->
                         if(task.isSuccessful) {
-                            db.collection("users").document(editTextLoginEmail.text.toString())
+                            db.collection("users").document(auth.uid.toString())
                                 .get()
                                 .addOnSuccessListener {
                                     if(task.isSuccessful) {

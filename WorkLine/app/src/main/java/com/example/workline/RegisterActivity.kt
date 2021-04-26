@@ -37,11 +37,12 @@ class RegisterActivity : AppCompatActivity() {
                     auth.createUserWithEmailAndPassword(editTextRegisterEmail.text.toString(), editTextRegisterPassword.text.toString())
                         .addOnCompleteListener(this) { task ->
                             if(task.isSuccessful) {
-                                db.collection("users").document(editTextRegisterEmail.text.toString()).set(
+                                db.collection("users").document(auth.currentUser.uid).set(
                                     hashMapOf(
                                         "userName" to editTextRegisterUsuario.text.toString(),
                                         "name" to null,
-                                        "lastName" to null
+                                        "lastName" to null,
+                                        "email" to editTextRegisterEmail.text.toString()
                                     )
                                 ).addOnCompleteListener {
                                     if(task.isSuccessful) {

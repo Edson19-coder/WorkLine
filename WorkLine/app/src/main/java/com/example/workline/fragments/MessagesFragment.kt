@@ -36,8 +36,8 @@ class MessagesFragment : Fragment() {
     private val pathChild = arrayListOf<String>("email-user-1", "email-user-2")
 
     var messages = arrayListOf<Message>(
-        Message("0", "Hola", "Edson Lugo", "Edson Lugo", "19/06/2021"),
-        Message("1", "Hola", "Edson Lugo", "Edson Lugo", "19/06/2021"))
+        Message("0", "Hola", "Edson Lugo", "19/06/2021"),
+        Message("1", "Hola", "Edson Lugo", "19/06/2021"))
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
