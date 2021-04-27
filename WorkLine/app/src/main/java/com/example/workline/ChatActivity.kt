@@ -8,12 +8,9 @@ import com.example.workline.adapters.MessageAdapter
 import com.example.workline.adapters.MessageInChatAdapter
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
 import  com.example.workline.modelos.Message
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.activity_chat.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -32,7 +29,8 @@ class ChatActivity : AppCompatActivity() {
         auth = Firebase.auth
         var myUserId = auth.currentUser.uid
         //var friendUserId = "gd606cbMxWRP7Sxywbeb8S8sQfw2"
-        var friendUserId = "ECpsTvTvloeK2lCuwcKJOzlORpm2"
+        //var friendUserId = "ECpsTvTvloeK2lCuwcKJOzlORpm2"
+        var friendUserId = "VEubfRognTaaKLQLMLEwHgu16Ks1"
 
         btnSendMessage.setOnClickListener {
             val textMessage = editTextMessage.text.toString()
@@ -51,9 +49,10 @@ class ChatActivity : AppCompatActivity() {
 
     private fun insertMessage(me: String, friend: String, textMessage: String, emitter: String) {
         val sdf = SimpleDateFormat("dd/M/yyyy hh:mm:ss")
-        val created_at = sdf.format(Date())
-        val message = Message(mensajeriaRef.push().key.toString(), textMessage, emitter.toString(), created_at)
+        val currentDate = sdf.format(Date())
+        val message = Message(mensajeriaRef.push().key.toString(), textMessage, emitter.toString(), currentDate)
         mensajeriaRef.child(me).child(friend).child(message.id).setValue(message)
+        insertLastMessage(me, friend, message)
     }
 
     private fun getMessages(userId: String ,friendId: String) {
@@ -62,13 +61,15 @@ class ChatActivity : AppCompatActivity() {
             override fun onDataChange(snapshot: DataSnapshot) {
                 listMessage.clear()
                 for(snap in snapshot.children) {
-                    val message: Message = snap.getValue(
-                            Message::class.java
-                    ) as Message
-                    message.mine = message.emitter.equals(userId)
-                    //message.mine = message.emitter == userId
-                    listMessage.add(message)
-                    Log.d("Success", message.toString())
+                    if(snap.key.toString() != "lastMessage") {
+                        val message: Message = snap.getValue(
+                                Message::class.java
+                        ) as Message
+                        message.mine = message.emitter.equals(userId)
+                        //message.mine = message.emitter == userId
+                        listMessage.add(message)
+                        Log.d("Success", message.toString())
+                    }
                 }
                 if(listMessage.size > 0 && listMessage != null) {
                     adapter.notifyDataSetChanged()
@@ -82,5 +83,9 @@ class ChatActivity : AppCompatActivity() {
 
         })
         adapter.notifyDataSetChanged()
+    }
+
+    private fun insertLastMessage(me: String, friend: String, lastMessage: Message) {
+        mensajeriaRef.child(me).child(friend).child("lastMessage").setValue(lastMessage)
     }
 }
