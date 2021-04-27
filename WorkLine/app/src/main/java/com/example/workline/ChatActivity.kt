@@ -10,7 +10,9 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import  com.example.workline.modelos.Message
+import com.example.workline.modelos.User
 import com.google.firebase.database.*
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_chat.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -18,6 +20,7 @@ import java.util.*
 class ChatActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
+    private val db = FirebaseFirestore.getInstance()
     private val dbrt = FirebaseDatabase.getInstance()
     private val mensajeriaRef = dbrt.getReference("Mensajeria")
     private val listMessage = mutableListOf<Message>()
@@ -50,9 +53,13 @@ class ChatActivity : AppCompatActivity() {
     private fun insertMessage(me: String, friend: String, textMessage: String, emitter: String) {
         val sdf = SimpleDateFormat("dd/M/yyyy hh:mm:ss")
         val currentDate = sdf.format(Date())
-        val message = Message(mensajeriaRef.push().key.toString(), textMessage, emitter.toString(), currentDate)
-        mensajeriaRef.child(me).child(friend).child(message.id).setValue(message)
-        insertLastMessage(me, friend, message)
+        db.collection("users").document(friend).get().addOnSuccessListener {
+            val user = User(it.get("userName").toString(), it.get("email").toString(), it.get("name").toString(), it.get("lastName").toString())
+
+            val message = Message(mensajeriaRef.push().key.toString(), textMessage, emitter.toString(), currentDate, user.nombre + " " + user.lastName)
+            mensajeriaRef.child(me).child(friend).child(message.id).setValue(message)
+            insertLastMessage(me, friend, message)
+        }
     }
 
     private fun getMessages(userId: String ,friendId: String) {

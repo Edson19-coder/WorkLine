@@ -36,7 +36,8 @@ class MessageAdapter(val context: FragmentActivity?, val messages: MutableList<M
                 itemView.groupTextView.text = "Tu: " + message.content
             else
                 itemView.groupTextView.text = message.content
-            itemView.textViewDateSend.text = message.created_at.toString()
+            itemView.textViewDateSend.text = message.created_at
+            itemView.titleTextView.text = message.nameUser
         }
 
         init {
