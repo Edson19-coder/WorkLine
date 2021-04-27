@@ -4,6 +4,9 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import com.example.workline.modelos.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -16,12 +19,28 @@ class RegisterActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private val db = FirebaseFirestore.getInstance()
 
+    val carreras = arrayOf("Actuaria","LCC","LCTI","LF","LM","LMAD")
+    var carrera: String = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
 
         btnRegisterClose.setOnClickListener {
             finish()
+        }
+
+        spinnerRegisterCarrera.adapter = ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,carreras)
+
+        spinnerRegisterCarrera.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+                carrera = carreras.get(0)
+            }
+
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                carrera = carreras.get(p2)
+            }
+
         }
 
         setup()
@@ -40,13 +59,14 @@ class RegisterActivity : AppCompatActivity() {
                                 db.collection("users").document(auth.currentUser.uid).set(
                                     hashMapOf(
                                         "userName" to editTextRegisterUsuario.text.toString(),
-                                        "name" to null,
-                                        "lastName" to null,
-                                        "email" to editTextRegisterEmail.text.toString()
+                                        "name" to editTextRegisterName.text.toString(),
+                                        "lastName" to editTextRegisterApellidos.text.toString(),
+                                        "email" to editTextRegisterEmail.text.toString(),
+                                        "carrera" to carrera
                                     )
                                 ).addOnCompleteListener {
                                     if(task.isSuccessful) {
-                                        val user = User(editTextRegisterUsuario.text.toString(), editTextRegisterEmail.text.toString(), "", "")
+                                        val user = User(editTextRegisterUsuario.text.toString(), editTextRegisterEmail.text.toString(), editTextRegisterName.text.toString(), editTextRegisterApellidos.text.toString(), carrera)
                                         Log.d("Success", "Usuario registrado correctamente")
                                         showHome(user)
                                     } else {

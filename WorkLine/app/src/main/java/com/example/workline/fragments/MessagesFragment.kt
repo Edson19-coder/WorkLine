@@ -38,13 +38,13 @@ class MessagesFragment : Fragment() {
     private val chatsRef = dbrt.getReference("Mensajeria")
     private lateinit var rootView: View
 
+    var messages = arrayListOf<Message>(
+            Message("0", "Hola", "Edson Lugo", "19/06/2021"),
+            Message("1", "Hola", "Edson Lugo", "19/06/2021"))
+
     private val listUsersChat = mutableListOf<User>()
     private val listLastMessageChat = mutableListOf<Message>()
     private var adapter = MessageAdapter(activity, listLastMessageChat)
-
-    var messages = arrayListOf<Message>(
-        Message("0", "Hola", "Edson Lugo", "19/06/2021"),
-        Message("1", "Hola", "Edson Lugo", "19/06/2021"))
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -75,12 +75,6 @@ class MessagesFragment : Fragment() {
                 listUsersChat.clear()
 
                 for(snap in snapshot.children) {
-
-                    db.collection("users").document(snap.key.toString()).get().addOnSuccessListener {
-                        val user = User(it.get("userName").toString(), it.get("email").toString(), it.get("name").toString(), it.get("lastName").toString())
-                        listUsersChat.add(user)
-                        Log.d("Success", "Listo users")
-                    }
 
                     chatsRef.child(auth.currentUser.uid).child(snap.key.toString()).child("lastMessage").addValueEventListener(object : ValueEventListener {
                         override fun onDataChange(snapshot: DataSnapshot) {

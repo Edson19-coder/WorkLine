@@ -6,132 +6,187 @@
     android:layout_height="match_parent"
     tools:context=".RegisterActivity">
 
-    <ImageButton
-        android:id="@+id/btnRegisterClose"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:backgroundTint="@color/design_default_color_background"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_baseline_close_24" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/textView6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
-        android:text="Registrar"
-        android:textColor="@color/primary_color"
-        android:textSize="36sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
 
-    <EditText
-        android:id="@+id/editTextRegisterUsuario"
-        android:layout_width="0dp"
-        android:layout_height="60dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="32dp"
-        android:drawableStart="@drawable/ic_baseline_person_24"
-        android:ems="10"
-        android:hint="Usuario"
-        android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView6" />
+            <ImageButton
+                android:id="@+id/btnRegisterClose"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:backgroundTint="@color/design_default_color_background"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_baseline_close_24" />
 
-    <EditText
-        android:id="@+id/editTextRegisterEmail"
-        android:layout_width="0dp"
-        android:layout_height="60dp"
-        android:layout_marginTop="16dp"
-        android:drawableStart="@drawable/ic_baseline_email_24"
-        android:ems="10"
-        android:hint="Correo"
-        android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="@+id/editTextRegisterUsuario"
-        app:layout_constraintStart_toStartOf="@+id/editTextRegisterUsuario"
-        app:layout_constraintTop_toBottomOf="@+id/editTextRegisterUsuario" />
+            <TextView
+                android:id="@+id/textView6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="100dp"
+                android:text="Registrar"
+                android:textColor="@color/primary_color"
+                android:textSize="36sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/btnRegisterRegistrar"
-        android:layout_width="0dp"
-        android:layout_height="60dp"
-        android:layout_marginTop="24dp"
-        android:backgroundTint="@color/primary_color"
-        android:text="Entrar"
-        app:cornerRadius="20dp"
-        app:layout_constraintEnd_toEndOf="@+id/editTextRegisterPassword"
-        app:layout_constraintStart_toStartOf="@+id/editTextRegisterPassword"
-        app:layout_constraintTop_toBottomOf="@+id/editTextRegisterPassword" />
+            <EditText
+                android:id="@+id/editTextRegisterUsuario"
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="32dp"
+                android:drawableStart="@drawable/ic_baseline_person_24"
+                android:ems="10"
+                android:hint="Usuario"
+                android:inputType="textPersonName"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
-    <TextView
-        android:id="@+id/textView7"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="O"
-        android:textColor="@color/black"
-        android:textSize="24sp"
-        android:textStyle="normal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnRegisterRegistrar" />
+            <EditText
+                android:id="@+id/editTextRegisterName"
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="32dp"
+                android:drawableStart="@drawable/ic_baseline_person_24"
+                android:ems="10"
+                android:hint="Nombre"
+                android:inputType="textPersonName"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/editTextRegisterPassword" />
 
-    <EditText
-        android:id="@+id/editTextRegisterPassword"
-        android:layout_width="0dp"
-        android:layout_height="60dp"
-        android:layout_marginTop="16dp"
-        android:drawableStart="@drawable/ic_baseline_lock_24"
-        android:ems="10"
-        android:hint="Contraseña"
-        android:inputType="textPassword"
-        app:layout_constraintEnd_toEndOf="@+id/editTextRegisterUsuario"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@+id/editTextRegisterUsuario"
-        app:layout_constraintTop_toBottomOf="@+id/editTextRegisterEmail" />
+            <EditText
+                android:id="@+id/editTextRegisterApellidos"
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="32dp"
+                android:drawableStart="@drawable/ic_baseline_person_24"
+                android:ems="10"
+                android:hint="Apellidos"
+                android:inputType="textPersonName"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/editTextRegisterName" />
 
-    <Button
-        android:id="@+id/btnRegisterGoogle"
-        android:layout_width="0dp"
-        android:layout_height="60dp"
-        android:layout_marginTop="16dp"
-        android:backgroundTint="@color/white"
-        android:text="CONTINUAR CON GOOGLE"
-        android:textColor="@color/black"
-        app:cornerRadius="20dp"
-        app:layout_constraintEnd_toEndOf="@+id/btnRegisterRegistrar"
-        app:layout_constraintStart_toStartOf="@+id/btnRegisterRegistrar"
-        app:layout_constraintTop_toBottomOf="@+id/textView7" />
+            <EditText
+                android:id="@+id/editTextRegisterEmail"
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:layout_marginTop="16dp"
+                android:drawableStart="@drawable/ic_baseline_email_24"
+                android:ems="10"
+                android:hint="Correo"
+                android:inputType="textPersonName"
+                app:layout_constraintEnd_toEndOf="@+id/editTextRegisterUsuario"
+                app:layout_constraintStart_toStartOf="@+id/editTextRegisterUsuario"
+                app:layout_constraintTop_toBottomOf="@+id/editTextRegisterUsuario" />
 
-    <Button
-        android:id="@+id/btnRegisterFacebook"
-        android:layout_width="0dp"
-        android:layout_height="60dp"
-        android:layout_marginTop="8dp"
-        android:backgroundTint="#3C5C9C"
-        android:text="CONTINUAR CON FACEBOOK"
-        android:textColor="@color/white"
-        app:cornerRadius="20dp"
-        app:layout_constraintEnd_toEndOf="@+id/btnRegisterGoogle"
-        app:layout_constraintStart_toStartOf="@+id/btnRegisterGoogle"
-        app:layout_constraintTop_toBottomOf="@+id/btnRegisterGoogle" />
+            <Button
+                android:id="@+id/btnRegisterRegistrar"
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:layout_marginTop="16dp"
+                android:backgroundTint="@color/primary_color"
+                android:text="Entrar"
+                app:cornerRadius="20dp"
+                app:layout_constraintEnd_toEndOf="@+id/editTextRegisterPassword"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/editTextRegisterPassword"
+                app:layout_constraintTop_toBottomOf="@+id/spinnerRegisterCarrera" />
 
-    <TextView
-        android:id="@+id/textView8"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:text="¿Ya tienes cuenta? Inicia Sesión"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnRegisterFacebook" />
+            <TextView
+                android:id="@+id/textView7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="O"
+                android:textColor="@color/black"
+                android:textSize="24sp"
+                android:textStyle="normal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btnRegisterRegistrar" />
+
+            <EditText
+                android:id="@+id/editTextRegisterPassword"
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:layout_marginTop="16dp"
+                android:drawableStart="@drawable/ic_baseline_lock_24"
+                android:ems="10"
+                android:hint="Contraseña"
+                android:inputType="textPassword"
+                app:layout_constraintEnd_toEndOf="@+id/editTextRegisterUsuario"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="@+id/editTextRegisterUsuario"
+                app:layout_constraintTop_toBottomOf="@+id/editTextRegisterEmail" />
+
+            <Button
+                android:id="@+id/btnRegisterGoogle"
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:layout_marginTop="16dp"
+                android:backgroundTint="@color/white"
+                android:text="CONTINUAR CON GOOGLE"
+                android:textColor="@color/black"
+                app:cornerRadius="20dp"
+                app:layout_constraintEnd_toEndOf="@+id/btnRegisterRegistrar"
+                app:layout_constraintStart_toStartOf="@+id/btnRegisterRegistrar"
+                app:layout_constraintTop_toBottomOf="@+id/textView7" />
+
+            <Button
+                android:id="@+id/btnRegisterFacebook"
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:layout_marginTop="8dp"
+                android:backgroundTint="#3C5C9C"
+                android:text="CONTINUAR CON FACEBOOK"
+                android:textColor="@color/white"
+                app:cornerRadius="20dp"
+                app:layout_constraintEnd_toEndOf="@+id/btnRegisterGoogle"
+                app:layout_constraintStart_toStartOf="@+id/btnRegisterGoogle"
+                app:layout_constraintTop_toBottomOf="@+id/btnRegisterGoogle" />
+
+            <TextView
+                android:id="@+id/textView8"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="¿Ya tienes cuenta? Inicia Sesión"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.497"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btnRegisterFacebook" />
+
+            <Spinner
+                android:id="@+id/spinnerRegisterCarrera"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:layout_constraintEnd_toEndOf="@+id/editTextRegisterApellidos"
+                app:layout_constraintStart_toStartOf="@+id/editTextRegisterApellidos"
+                app:layout_constraintTop_toBottomOf="@+id/editTextRegisterApellidos" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

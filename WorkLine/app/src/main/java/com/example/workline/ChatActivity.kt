@@ -31,9 +31,7 @@ class ChatActivity : AppCompatActivity() {
         setContentView(R.layout.activity_chat)
         auth = Firebase.auth
         var myUserId = auth.currentUser.uid
-        //var friendUserId = "gd606cbMxWRP7Sxywbeb8S8sQfw2"
-        //var friendUserId = "ECpsTvTvloeK2lCuwcKJOzlORpm2"
-        var friendUserId = "VEubfRognTaaKLQLMLEwHgu16Ks1"
+        var friendUserId = "irNUmW0uZTS0K68oYSYtNSwWPFo2"
 
         btnSendMessage.setOnClickListener {
             val textMessage = editTextMessage.text.toString()
@@ -54,7 +52,7 @@ class ChatActivity : AppCompatActivity() {
         val sdf = SimpleDateFormat("dd/M/yyyy hh:mm:ss")
         val currentDate = sdf.format(Date())
         db.collection("users").document(friend).get().addOnSuccessListener {
-            val user = User(it.get("userName").toString(), it.get("email").toString(), it.get("name").toString(), it.get("lastName").toString())
+            val user = User(it.get("userName").toString(), it.get("email").toString(), it.get("name").toString(), it.get("lastName").toString(), it.get("carrera").toString())
 
             val message = Message(mensajeriaRef.push().key.toString(), textMessage, emitter.toString(), currentDate, user.nombre + " " + user.lastName)
             mensajeriaRef.child(me).child(friend).child(message.id).setValue(message)
