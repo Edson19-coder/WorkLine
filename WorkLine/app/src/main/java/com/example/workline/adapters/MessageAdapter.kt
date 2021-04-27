@@ -28,9 +28,8 @@ class MessageAdapter(val context: FragmentActivity?, val messages: MutableList<M
 
     private lateinit var auth: FirebaseAuth
 
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun setData(message: Message) {
-            //itemView.titleTextView.text = user.nombre + " " + user.lastName
             auth = Firebase.auth
             if(message.emitter.equals(auth.uid))
                 itemView.groupTextView.text = "Tu: " + message.content
@@ -38,18 +37,10 @@ class MessageAdapter(val context: FragmentActivity?, val messages: MutableList<M
                 itemView.groupTextView.text = message.content
             itemView.textViewDateSend.text = message.created_at
             itemView.titleTextView.text = message.nameChat
-        }
-
-        init {
-            itemView.setOnClickListener(this)
-        }
-        override fun onClick(v: View?) {
-            when(v!!.id) {
-                R.id.idFrameLayoutCard -> {
-                    val  activityIntent =  Intent(context,ChatActivity::class.java)
-                    //activityIntent.putExtra(ALBUM_POSITION,this.albumPosition)
-                    context?.startActivity(activityIntent)
-                }
+            itemView.idFrameLayoutCard.setOnClickListener {
+                val  activityIntent =  Intent(context,ChatActivity::class.java)
+                activityIntent.putExtra("idFriend", message.idFriendChat)
+                context?.startActivity(activityIntent)
             }
         }
     }

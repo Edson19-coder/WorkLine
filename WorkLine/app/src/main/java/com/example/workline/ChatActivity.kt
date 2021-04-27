@@ -30,8 +30,13 @@ class ChatActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat)
         auth = Firebase.auth
+
+        val bundle = intent.extras
+        val idFriend = bundle?.getString("idFriend").toString()
+
         var myUserId = auth.currentUser.uid
-        var friendUserId = "jh9GYTj4lcex7maGRtUY9kQ9I203" //David
+        var friendUserId = idFriend
+        //var friendUserId = "jh9GYTj4lcex7maGRtUY9kQ9I203" //David
         //var friendUserId = "irNUmW0uZTS0K68oYSYtNSwWPFo2" //Osmar
         //var friendUserId = "xNlc1h99vGNMLIsSapFLOjMB8OD2"   //Edson
 
@@ -59,7 +64,7 @@ class ChatActivity : AppCompatActivity() {
         db.collection("users").document(friend).get().addOnSuccessListener {
             val user = User(it.get("userName").toString(), it.get("email").toString(), it.get("name").toString(), it.get("lastName").toString(), it.get("carrera").toString())
 
-            val message = Message(mensajeriaRef.push().key.toString(), textMessage, emitterId.toString(), currentDate, user.nombre + " " + user.lastName, emitterName)
+            val message = Message(mensajeriaRef.push().key.toString(), textMessage, emitterId.toString(), currentDate, user.nombre + " " + user.lastName, emitterName, friend)
             mensajeriaRef.child(me).child(friend).child(message.id).setValue(message)
             insertLastMessage(me, friend, message)
         }
