@@ -21,17 +21,20 @@ import kotlinx.android.synthetic.main.activity_home.*
 class HomeActivity : AppCompatActivity() {
 
     public var email:String = "";
+    var userCarrera = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
         val bundle = intent.extras
-        email = bundle?.getString("email").toString()
+        userCarrera = bundle?.getString("carrera").toString()
 
         //GAURDADO DE DATOS
         val prefs = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE).edit()
-        prefs.putString("email", email)
+        prefs.putString("carrera", userCarrera)
+
+        setCarrera(userCarrera)
 
         val appBarConfiguration = AppBarConfiguration(setOf(R.id.messagesFragment, R.id.groupsFragment, R.id.tasksFragment))
         bottomNavigationView.setupWithNavController(findNavController(R.id.fragment))
@@ -42,4 +45,13 @@ class HomeActivity : AppCompatActivity() {
         startActivity(activityMain)
     }
 
+    @JvmName("getCarrera")
+    fun getCarrera(): String {
+        return userCarrera
+    }
+
+    @JvmName("setCarrera")
+    fun setCarrera(carrera:String) {
+        this.userCarrera = carrera
+    }
 }

@@ -82,7 +82,9 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun showHome(user:User) {
-        val activityHome = Intent(this, HomeActivity::class.java)
+        val activityHome = Intent(this, HomeActivity::class.java).apply {
+            putExtra("carrera", user.carrera)
+        }
         startActivity(activityHome)
     }
 }

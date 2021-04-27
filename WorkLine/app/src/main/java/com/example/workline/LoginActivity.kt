@@ -69,7 +69,7 @@ class LoginActivity : AppCompatActivity() {
 
     private fun showHome(user:User) {
         val activityHome = Intent(this, HomeActivity::class.java).apply {
-            putExtra("email", user.email)
+            putExtra("carrera", user.carrera)
         }
         startActivity(activityHome)
     }
