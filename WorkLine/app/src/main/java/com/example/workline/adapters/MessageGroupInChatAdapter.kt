@@ -18,6 +18,8 @@ class MessageGroupInChatAdapter (val messages: MutableList<MessageGroup>) :
 
         fun setData(message: MessageGroup) {
             itemView.textViewMessageInChat.text = message.content
+            itemView.textViewMessageInChatUserName.text = message.nameUser
+            itemView.textViewMessageInChatTime.text = message.created_at
 
             val params = itemView.contenedorMensaje.layoutParams
 

@@ -31,16 +31,21 @@ class ChatActivity : AppCompatActivity() {
         setContentView(R.layout.activity_chat)
         auth = Firebase.auth
         var myUserId = auth.currentUser.uid
-        var friendUserId = "jh9GYTj4lcex7maGRtUY9kQ9I203"
+        var friendUserId = "jh9GYTj4lcex7maGRtUY9kQ9I203" //David
+        //var friendUserId = "irNUmW0uZTS0K68oYSYtNSwWPFo2" //Osmar
+        //var friendUserId = "xNlc1h99vGNMLIsSapFLOjMB8OD2"   //Edson
 
         btnSendMessage.setOnClickListener {
             val textMessage = editTextMessage.text.toString()
 
             if(myUserId.toString().isNotEmpty() && friendUserId.toString().isNotEmpty() && textMessage.isNotEmpty()) {
-                //Insertamos el mensaje en el usuario emisor
-                insertMessage(myUserId.toString(), friendUserId, textMessage, myUserId.toString())
-                //Insertamos el mensaje en el usuario remitente
-                insertMessage(friendUserId, myUserId.toString(), textMessage, myUserId.toString())
+                db.collection("users").document(myUserId).get().addOnSuccessListener {
+                    val emmiterName = it.get("name").toString() + " " + it.get("lastName").toString()
+                    //Insertamos el mensaje en el usuario emisor
+                    insertMessage(myUserId.toString(), friendUserId, textMessage, myUserId.toString(), emmiterName)
+                    //Insertamos el mensaje en el usuario remitente
+                    insertMessage(friendUserId, myUserId.toString(), textMessage, myUserId.toString(), emmiterName)
+                }
             }
             editTextMessage.text.clear()
         }
@@ -48,13 +53,13 @@ class ChatActivity : AppCompatActivity() {
         getMessages(myUserId, friendUserId)
     }
 
-    private fun insertMessage(me: String, friend: String, textMessage: String, emitter: String) {
+    private fun insertMessage(me: String, friend: String, textMessage: String, emitterId: String, emitterName: String) {
         val sdf = SimpleDateFormat("dd/M/yyyy hh:mm:ss")
         val currentDate = sdf.format(Date())
         db.collection("users").document(friend).get().addOnSuccessListener {
             val user = User(it.get("userName").toString(), it.get("email").toString(), it.get("name").toString(), it.get("lastName").toString(), it.get("carrera").toString())
 
-            val message = Message(mensajeriaRef.push().key.toString(), textMessage, emitter.toString(), currentDate, user.nombre + " " + user.lastName)
+            val message = Message(mensajeriaRef.push().key.toString(), textMessage, emitterId.toString(), currentDate, user.nombre + " " + user.lastName, emitterName)
             mensajeriaRef.child(me).child(friend).child(message.id).setValue(message)
             insertLastMessage(me, friend, message)
         }

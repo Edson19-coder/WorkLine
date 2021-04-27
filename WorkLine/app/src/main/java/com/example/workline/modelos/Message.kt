@@ -7,7 +7,8 @@ class Message(
     var content: String = "",
     var emitter: String = "",
     var created_at: String = "",
-    var nameUser: String = ""
+    var nameChat: String = "",
+    var emmiterName: String = ""
 ) {
     @Exclude
     var mine: Boolean = false
