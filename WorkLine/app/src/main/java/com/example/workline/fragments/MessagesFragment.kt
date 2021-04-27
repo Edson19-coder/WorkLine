@@ -65,7 +65,7 @@ class MessagesFragment : Fragment() {
         }
     }
 
-    private fun getChats() {
+    /*private fun getChats() {
         auth = Firebase.auth
         chatsRef.child(auth.currentUser.uid).addValueEventListener(object : ValueEventListener {
 
@@ -92,6 +92,31 @@ class MessagesFragment : Fragment() {
 
                     })
                 }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+
+        })
+    }*/
+
+    private fun getChats() {
+        auth = Firebase.auth
+        chatsRef.child(auth.currentUser.uid).child("lastMessage").addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                listLastMessageChat.clear()
+                if(snapshot.exists()) {
+                    listLastMessageChat.clear()
+                    for(snap in snapshot.children) {
+                        val message: Message = snap.getValue(
+                                Message::class.java
+                        ) as Message
+                        listLastMessageChat.add(message)
+                        Log.d("Success", "Listo last message")
+                    }
+                }
+                adapter.notifyDataSetChanged()
             }
 
             override fun onCancelled(error: DatabaseError) {

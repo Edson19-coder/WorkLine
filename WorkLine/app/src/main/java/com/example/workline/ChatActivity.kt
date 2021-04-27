@@ -101,6 +101,6 @@ class ChatActivity : AppCompatActivity() {
     }
 
     private fun insertLastMessage(me: String, friend: String, lastMessage: Message) {
-        mensajeriaRef.child(me).child(friend).child("lastMessage").setValue(lastMessage)
+        mensajeriaRef.child(me).child("lastMessage").child(friend).setValue(lastMessage)
     }
 }
