@@ -20,7 +20,7 @@ class GroupAdapter (val context: FragmentActivity?, val messages: MutableList<Me
         RecyclerView.Adapter<GroupAdapter.ViewHolder>() {
     private lateinit var auth: FirebaseAuth
 
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun setData(message: MessageGroup) {
             //itemView.titleTextView.text = user.nombre + " " + user.lastName
             auth = Firebase.auth
@@ -30,18 +30,10 @@ class GroupAdapter (val context: FragmentActivity?, val messages: MutableList<Me
                 itemView.groupTextView.text = message.content
             itemView.textViewDateSend.text = message.created_at
             itemView.titleTextView.text = message.nameGroup
-        }
-
-        init {
-            itemView.setOnClickListener(this)
-        }
-        override fun onClick(v: View?) {
-            when(v!!.id) {
-                R.id.idFrameLayoutCard -> {
-                    val  activityIntent =  Intent(context, ChatGroupActivity::class.java)
-                    //activityIntent.putExtra(ALBUM_POSITION,this.albumPosition)
-                    context?.startActivity(activityIntent)
-                }
+            itemView.idFrameLayoutCard.setOnClickListener {
+                val  activityIntent =  Intent(context, ChatGroupActivity::class.java)
+                activityIntent.putExtra("carrera", message.nameGroup)
+                context?.startActivity(activityIntent)
             }
         }
     }

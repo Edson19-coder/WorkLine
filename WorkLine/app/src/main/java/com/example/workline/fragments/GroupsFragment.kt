@@ -42,7 +42,7 @@ class GroupsFragment : Fragment() {
     private lateinit var rootView: View
 
     var messages = arrayListOf<MessageGroup>(
-            MessageGroup("0", "Hola", "Edson Lugo", "19/06/2021", "Edson19", "LMAD"))
+            MessageGroup("0", "Hola", "Edson Lugo", "19/06/2021", "Edson19", "LCC"))
 
     private val listLastMessageGroupChat = mutableListOf<MessageGroup>()
     private var adapter = GroupAdapter(activity, listLastMessageGroupChat)
@@ -78,12 +78,14 @@ class GroupsFragment : Fragment() {
         auth = Firebase.auth
         groupRef.child(carrera).child("lastMessageGroup").addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                listLastMessageGroupChat.clear()
-                val groupMessage: MessageGroup = snapshot.getValue(
-                        MessageGroup::class.java
-                ) as MessageGroup
+                if(snapshot.exists()) {
+                    listLastMessageGroupChat.clear()
+                    val groupMessage: MessageGroup = snapshot.getValue(
+                            MessageGroup::class.java
+                    ) as MessageGroup
 
-                listLastMessageGroupChat.add(groupMessage)
+                    listLastMessageGroupChat.add(groupMessage)
+                }
                 adapter.notifyDataSetChanged()
                 Log.d("success", snapshot.toString())
             }

@@ -29,10 +29,13 @@ class ChatGroupActivity : AppCompatActivity() {
     private val mensajeriaGroupRef = dbrt.getReference("MensajeriaMuro")
     private val listMessage = mutableListOf<MessageGroup>()
     private val adapter = MessageGroupInChatAdapter(listMessage)
-
+    private var carrera = "LMAD"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat_group)
+
+        val bundle = intent.extras
+        carrera = bundle?.getString("carrera").toString()
 
         btnSendMessageGroup.setOnClickListener {
             val messageText = editTextMessageGroup.text.toString()
@@ -46,7 +49,7 @@ class ChatGroupActivity : AppCompatActivity() {
 
     private fun getMessage() {
         auth = Firebase.auth
-        mensajeriaGroupRef.child("LMAD").addValueEventListener(object : ValueEventListener {
+        mensajeriaGroupRef.child(carrera).addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 listMessage.clear()
                 for(snap in snapshot.children) {

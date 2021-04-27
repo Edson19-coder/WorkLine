@@ -76,12 +76,13 @@ class MessagesFragment : Fragment() {
 
                     chatsRef.child(auth.currentUser.uid).child(snap.key.toString()).child("lastMessage").addValueEventListener(object : ValueEventListener {
                         override fun onDataChange(snapshot: DataSnapshot) {
-                            val message: Message = snapshot.getValue(
-                                    Message::class.java
-                            ) as Message
-                            listLastMessageChat.add(message)
-                            Log.d("Success", "Listo last message")
-
+                            if(snapshot.exists()) {
+                                val message: Message = snapshot.getValue(
+                                        Message::class.java
+                                ) as Message
+                                listLastMessageChat.add(message)
+                                Log.d("Success", "Listo last message")
+                            }
                             adapter.notifyDataSetChanged()
                         }
 
