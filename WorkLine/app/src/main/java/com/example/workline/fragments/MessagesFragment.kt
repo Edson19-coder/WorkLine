@@ -42,7 +42,6 @@ class MessagesFragment : Fragment() {
             Message("0", "Hola", "Edson Lugo", "19/06/2021"),
             Message("1", "Hola", "Edson Lugo", "19/06/2021"))
 
-    private val listUsersChat = mutableListOf<User>()
     private val listLastMessageChat = mutableListOf<Message>()
     private var adapter = MessageAdapter(activity, listLastMessageChat)
 
@@ -72,18 +71,17 @@ class MessagesFragment : Fragment() {
 
             override fun onDataChange(snapshot: DataSnapshot) {
                 listLastMessageChat.clear()
-                listUsersChat.clear()
 
                 for(snap in snapshot.children) {
 
                     chatsRef.child(auth.currentUser.uid).child(snap.key.toString()).child("lastMessage").addValueEventListener(object : ValueEventListener {
                         override fun onDataChange(snapshot: DataSnapshot) {
-                            listLastMessageChat.clear()
                             val message: Message = snapshot.getValue(
                                     Message::class.java
                             ) as Message
                             listLastMessageChat.add(message)
                             Log.d("Success", "Listo last message")
+
                             adapter.notifyDataSetChanged()
                         }
 
@@ -92,9 +90,7 @@ class MessagesFragment : Fragment() {
                         }
 
                     })
-                    adapter.notifyDataSetChanged()
                 }
-
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -102,6 +98,5 @@ class MessagesFragment : Fragment() {
             }
 
         })
-        adapter.notifyDataSetChanged()
     }
 }

@@ -31,7 +31,7 @@ class ChatActivity : AppCompatActivity() {
         setContentView(R.layout.activity_chat)
         auth = Firebase.auth
         var myUserId = auth.currentUser.uid
-        var friendUserId = "irNUmW0uZTS0K68oYSYtNSwWPFo2"
+        var friendUserId = "jh9GYTj4lcex7maGRtUY9kQ9I203"
 
         btnSendMessage.setOnClickListener {
             val textMessage = editTextMessage.text.toString()
