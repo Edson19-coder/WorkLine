@@ -74,7 +74,9 @@ class RegisterActivity : AppCompatActivity() {
                                     }
                                 }
                             } else {
+
                                 Log.e("Error", "Error al crear auth del usuario")
+                                Log.e("Error", task.exception.toString())
                             }
                         }
             }
