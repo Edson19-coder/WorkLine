@@ -93,7 +93,7 @@ class CreateGroupActivity : AppCompatActivity() {
             val groupId = subGroupsRef.push().key.toString()
             val subGroup = SubGroup( groupId,title.toString(), urlUpload.toString())
                 subGroupsRef.child(carrera.toString()).child(groupId).setValue(subGroup).addOnSuccessListener {
-                    subGroupsRef.child(carrera.toString()).child("Miembros").child(user.id).setValue(user)
+                    subGroupsRef.child(carrera.toString()).child(groupId).child("Miembros").child(user.id).setValue(user)
                     AddUserMemberSubGroup(user, subGroup)
                 }
             Log.d("AddGroup", "Success add group")
