@@ -15,6 +15,8 @@ import com.example.workline.modelos.MessageGroup
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.group_element.view.*
 import kotlinx.android.synthetic.main.message_element.view.*
 
 class GroupAdapter (val context: FragmentActivity?, val messages: MutableList<MessageGroup>) :
@@ -31,6 +33,8 @@ class GroupAdapter (val context: FragmentActivity?, val messages: MutableList<Me
                 itemView.groupTextView.text = message.content
             itemView.textViewDateSend.text = message.created_at
             itemView.titleTextView.text = message.nameGroup
+            if(message.imageGroup != "" && message.imageGroup != null)
+                Picasso.get().load(message.imageGroup).into(itemView.imageView3)
             itemView.idFrameLayoutCard.setOnClickListener {
                 val  activityIntent =  Intent(context, InGroupActivity::class.java)
                 activityIntent.putExtra("carrera", message.nameGroup)

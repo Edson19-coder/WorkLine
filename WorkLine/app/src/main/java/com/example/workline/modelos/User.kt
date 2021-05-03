@@ -5,5 +5,6 @@ class User(
     val email: String,
     val nombre: String,
     val lastName: String,
-    val carrera: String
+    val carrera: String,
+    val image: String
 )

@@ -66,7 +66,7 @@ class RegisterActivity : AppCompatActivity() {
                                     )
                                 ).addOnCompleteListener {
                                     if(task.isSuccessful) {
-                                        val user = User(editTextRegisterUsuario.text.toString(), editTextRegisterEmail.text.toString(), editTextRegisterName.text.toString(), editTextRegisterApellidos.text.toString(), carrera)
+                                        val user = User(editTextRegisterUsuario.text.toString(), editTextRegisterEmail.text.toString(), editTextRegisterName.text.toString(), editTextRegisterApellidos.text.toString(), carrera, "https://firebasestorage.googleapis.com/v0/b/proyecto-poi.appspot.com/o/images%2Fguest.png?alt=media&token=8874ca5d-5f52-45ca-8b21-b485912279d8")
                                         Log.d("Success", "Usuario registrado correctamente")
                                         showHome(user)
                                     } else {

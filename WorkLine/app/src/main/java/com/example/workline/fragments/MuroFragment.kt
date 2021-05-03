@@ -67,7 +67,7 @@ class MuroFragment : Fragment() {
         val currentDate = sdf.format(Date())
 
         db.collection("users").document(auth.currentUser.uid).get().addOnSuccessListener {
-            val user = User(it.get("userName").toString(), it.get("email").toString(), it.get("name").toString(), it.get("lastName").toString(), it.get("carrera").toString())
+            val user = User(it.get("userName").toString(), it.get("email").toString(), it.get("name").toString(), it.get("lastName").toString(), it.get("carrera").toString(), it.get("image").toString())
 
             val message = MessageGroup(mensajeriaGroupRef.push().key.toString(), textMessage, auth.currentUser.uid, currentDate, user.nombre + " " + user.lastName, user.carrera)
             mensajeriaGroupRef.child(message.nameGroup).child(message.id).setValue(message)
@@ -76,6 +76,15 @@ class MuroFragment : Fragment() {
     }
 
     private fun insertLastMessage(lastMessage: MessageGroup, group: String) {
+        when(carrera) {
+            "LMAD" -> lastMessage.imageGroup = "https://firebasestorage.googleapis.com/v0/b/proyecto-poi.appspot.com/o/images%2Flmad.png?alt=media&token=b921494d-6231-47cc-a062-7ea49271ef4b"
+            "LCC" -> lastMessage.imageGroup = "https://firebasestorage.googleapis.com/v0/b/proyecto-poi.appspot.com/o/images%2Flcc.png?alt=media&token=2ebbef48-e5d7-412d-b372-e6580deefb19"
+            "LCTI" -> lastMessage.imageGroup = "https://firebasestorage.googleapis.com/v0/b/proyecto-poi.appspot.com/o/images%2Flcti.png?alt=media&token=f981be1f-793f-4a96-8aed-6763653d9349"
+            "LF" -> lastMessage.imageGroup = "https://firebasestorage.googleapis.com/v0/b/proyecto-poi.appspot.com/o/images%2Ffisico.png?alt=media&token=f61e145f-6cf8-46a7-bd2f-36d13eef2a4c"
+            "LM" -> lastMessage.imageGroup = "https://firebasestorage.googleapis.com/v0/b/proyecto-poi.appspot.com/o/images%2Fmatematicas.jpg?alt=media&token=e03fda3d-3a1f-485a-b26d-089b288e484e"
+            "Actuaria" -> lastMessage.imageGroup = "https://firebasestorage.googleapis.com/v0/b/proyecto-poi.appspot.com/o/images%2Factuaria.jpg?alt=media&token=51e51e25-9029-4642-8a23-2517e21cb4bc"
+        }
+
         mensajeriaGroupRef.child(group).child("lastMessageGroup").setValue(lastMessage)
     }
 

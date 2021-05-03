@@ -52,7 +52,7 @@ class LoginActivity : AppCompatActivity() {
                                 .get()
                                 .addOnSuccessListener {
                                     if(task.isSuccessful) {
-                                        val user = User((it.get("userName") as String), editTextLoginEmail.text.toString(), it.get("name") as String, it.get("lastName") as String, it.get("carrera") as String)
+                                        val user = User((it.get("userName") as String), editTextLoginEmail.text.toString(), it.get("name") as String, it.get("lastName") as String, it.get("carrera") as String, it.get("image").toString())
                                         Log.d("Success", "Usuario iniciado correctamente")
                                         showHome(user)
                                     } else {

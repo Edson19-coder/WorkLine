@@ -62,9 +62,9 @@ class ChatActivity : AppCompatActivity() {
         val sdf = SimpleDateFormat("dd/M/yyyy hh:mm:ss")
         val currentDate = sdf.format(Date())
         db.collection("users").document(friend).get().addOnSuccessListener {
-            val user = User(it.get("userName").toString(), it.get("email").toString(), it.get("name").toString(), it.get("lastName").toString(), it.get("carrera").toString())
+            val user = User(it.get("userName").toString(), it.get("email").toString(), it.get("name").toString(), it.get("lastName").toString(), it.get("carrera").toString(), it.get("image").toString())
 
-            val message = Message(mensajeriaRef.push().key.toString(), textMessage, emitterId.toString(), currentDate, user.nombre + " " + user.lastName, emitterName, friend)
+            val message = Message(mensajeriaRef.push().key.toString(), textMessage, emitterId.toString(), currentDate, user.nombre + " " + user.lastName, emitterName, friend, user.image)
             mensajeriaRef.child(me).child(friend).child(message.id).setValue(message)
             insertLastMessage(me, friend, message)
         }

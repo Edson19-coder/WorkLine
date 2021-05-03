@@ -8,7 +8,8 @@ class MessageGroup (
         var emitter: String = "",
         var created_at: String = "",
         var nameUser: String = "",
-        var nameGroup: String = ""
+        var nameGroup: String = "",
+        var imageGroup: String = ""
 ) {
     @Exclude
     var mine: Boolean = false

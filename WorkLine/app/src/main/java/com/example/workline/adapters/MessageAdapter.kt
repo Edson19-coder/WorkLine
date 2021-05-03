@@ -15,6 +15,8 @@ import com.example.workline.modelos.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.group_element.view.*
 import kotlinx.android.synthetic.main.message_element.view.*
 import kotlinx.coroutines.awaitAll
 import java.text.SimpleDateFormat
@@ -37,6 +39,8 @@ class MessageAdapter(val context: FragmentActivity?, val messages: MutableList<M
                 itemView.groupTextView.text = message.content
             itemView.textViewDateSend.text = message.created_at
             itemView.titleTextView.text = message.nameChat
+            if(message.userImage != "" && message.userImage != null)
+                Picasso.get().load(message.userImage).into(itemView.imageView3)
             itemView.idFrameLayoutCard.setOnClickListener {
                 val  activityIntent =  Intent(context,ChatActivity::class.java)
                 activityIntent.putExtra("idFriend", message.idFriendChat)

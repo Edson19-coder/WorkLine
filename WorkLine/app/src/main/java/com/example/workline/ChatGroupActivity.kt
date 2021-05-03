@@ -81,7 +81,7 @@ class ChatGroupActivity : AppCompatActivity() {
         val currentDate = sdf.format(Date())
 
         db.collection("users").document(auth.currentUser.uid).get().addOnSuccessListener {
-            val user = User(it.get("userName").toString(), it.get("email").toString(), it.get("name").toString(), it.get("lastName").toString(), it.get("carrera").toString())
+            val user = User(it.get("userName").toString(), it.get("email").toString(), it.get("name").toString(), it.get("lastName").toString(), it.get("carrera").toString(), it.get("image").toString())
 
             val message = MessageGroup(mensajeriaGroupRef.push().key.toString(), textMessage, auth.currentUser.uid, currentDate, user.nombre + " " + user.lastName, user.carrera)
             mensajeriaGroupRef.child(message.nameGroup).child(message.id).setValue(message)

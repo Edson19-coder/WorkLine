@@ -9,7 +9,8 @@ class Message(
     var created_at: String = "",
     var nameChat: String = "",
     var emmiterName: String = "",
-    var idFriendChat: String = ""
+    var idFriendChat: String = "",
+    var userImage: String = ""
 ) {
     @Exclude
     var mine: Boolean = false
