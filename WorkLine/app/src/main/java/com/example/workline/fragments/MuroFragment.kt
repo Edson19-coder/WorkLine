@@ -1,16 +1,31 @@
 package com.example.workline.fragments
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.workline.InGroupActivity
 import com.example.workline.R
-
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+import com.example.workline.adapters.MessageAdapter
+import com.example.workline.adapters.MessageGroupInChatAdapter
+import com.example.workline.modelos.MessageGroup
+import com.example.workline.modelos.User
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ktx.Firebase
+import kotlinx.android.synthetic.main.activity_chat_group.*
+import kotlinx.android.synthetic.main.fragment_messages.view.*
+import kotlinx.android.synthetic.main.fragment_muro.*
+import kotlinx.android.synthetic.main.fragment_muro.view.*
+import java.text.SimpleDateFormat
+import java.util.*
 
 /**
  * A simple [Fragment] subclass.
@@ -18,43 +33,79 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class MuroFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private lateinit var auth: FirebaseAuth
+    private val db = FirebaseFirestore.getInstance()
+    private val dbrt = FirebaseDatabase.getInstance()
+    private val mensajeriaGroupRef = dbrt.getReference("MensajeriaMuro")
+    private val listMessage = mutableListOf<MessageGroup>()
+    private var adapter = MessageGroupInChatAdapter(listMessage)
+    private var carrera = ""
+    private lateinit var rootView: View
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_muro, container, false)
+        rootView = inflater.inflate(R.layout.fragment_muro, container, false)
+        carrera = (getActivity() as InGroupActivity).getCarrera()
+        adapter = MessageGroupInChatAdapter(listMessage)
+        rootView.rvChatForo.adapter = adapter
+
+        rootView.btnSendMessageMuroGroup.setOnClickListener {
+            val messageText = editTextMuroMessageGroup.text.toString()
+            createMessage(messageText)
+            editTextMuroMessageGroup.text.clear()
+        }
+
+        getMessage()
+        return rootView
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment MuroFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            MuroFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    private fun createMessage(textMessage: String) {
+        val sdf = SimpleDateFormat("dd/M/yyyy hh:mm:ss")
+        val currentDate = sdf.format(Date())
+
+        db.collection("users").document(auth.currentUser.uid).get().addOnSuccessListener {
+            val user = User(it.get("userName").toString(), it.get("email").toString(), it.get("name").toString(), it.get("lastName").toString(), it.get("carrera").toString())
+
+            val message = MessageGroup(mensajeriaGroupRef.push().key.toString(), textMessage, auth.currentUser.uid, currentDate, user.nombre + " " + user.lastName, user.carrera)
+            mensajeriaGroupRef.child(message.nameGroup).child(message.id).setValue(message)
+            insertLastMessage(message, user.carrera)
+        }
+    }
+
+    private fun insertLastMessage(lastMessage: MessageGroup, group: String) {
+        mensajeriaGroupRef.child(group).child("lastMessageGroup").setValue(lastMessage)
+    }
+
+    private fun getMessage() {
+        auth = Firebase.auth
+        mensajeriaGroupRef.child(carrera).addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                listMessage.clear()
+                for(snap in snapshot.children) {
+                    if(snap.key.toString() != "lastMessageGroup") {
+                        val groupMessage: MessageGroup = snap.getValue(
+                            MessageGroup::class.java
+                        ) as MessageGroup
+                        groupMessage.mine = groupMessage.emitter.equals(auth.currentUser.uid)
+                        listMessage.add(groupMessage)
+                        Log.d("success", snapshot.toString())
+                    }
+                }
+
+                if(listMessage.size > 0 && listMessage != null) {
+                    adapter.notifyDataSetChanged()
+                    rvChatForo.smoothScrollToPosition(listMessage.size - 1)
                 }
             }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+
+        })
     }
+
 }

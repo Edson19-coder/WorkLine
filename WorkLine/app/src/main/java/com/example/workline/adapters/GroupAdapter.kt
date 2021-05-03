@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.workline.ChatActivity
 import com.example.workline.ChatGroupActivity
+import com.example.workline.InGroupActivity
 import com.example.workline.R
 import com.example.workline.modelos.Message
 import com.example.workline.modelos.MessageGroup
@@ -31,7 +32,7 @@ class GroupAdapter (val context: FragmentActivity?, val messages: MutableList<Me
             itemView.textViewDateSend.text = message.created_at
             itemView.titleTextView.text = message.nameGroup
             itemView.idFrameLayoutCard.setOnClickListener {
-                val  activityIntent =  Intent(context, ChatGroupActivity::class.java)
+                val  activityIntent =  Intent(context, InGroupActivity::class.java)
                 activityIntent.putExtra("carrera", message.nameGroup)
                 context?.startActivity(activityIntent)
             }

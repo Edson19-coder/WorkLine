@@ -24,16 +24,7 @@ import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.fragment_groups.view.*
 import kotlinx.android.synthetic.main.fragment_messages.view.*
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [GroupsFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class GroupsFragment : Fragment() {
 
     private lateinit var auth: FirebaseAuth
@@ -53,11 +44,6 @@ class GroupsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         carrera = (getActivity() as HomeActivity).getCarrera()
-
-        val duration = Toast.LENGTH_SHORT
-        val toast = Toast.makeText(context, carrera, duration)
-        toast.show()
-
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_groups, container, false)
         adapter = GroupAdapter(activity, listLastMessageGroupChat)
