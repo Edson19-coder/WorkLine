@@ -106,7 +106,7 @@ class MuroFragment : Fragment() {
 
                 if(listMessage.size > 0 && listMessage != null) {
                     adapter.notifyDataSetChanged()
-                    rvChatForo.smoothScrollToPosition(listMessage.size - 1)
+                    rootView.rvChatForo.smoothScrollToPosition(listMessage.size - 1)
                 }
             }
 

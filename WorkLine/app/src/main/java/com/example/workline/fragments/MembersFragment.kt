@@ -19,8 +19,6 @@ import kotlinx.android.synthetic.main.fragment_members.view.*
 class MembersFragment : Fragment() {
 
     private val db = FirebaseFirestore.getInstance()
-    private val listMembersGroup = mutableListOf<UserPreview>()
-    //private var adapter = MessageGroupInChatAdapter(listMembersGroup)
     private lateinit var rootView: View
 
     private val listMembers = mutableListOf<UserPreview>()

@@ -91,7 +91,7 @@ class CreateGroupActivity : AppCompatActivity() {
             it.id
             val user = UserPreview(it.id.toString(), it.get("name").toString() + " " + it.get("lastName").toString(), "")
             val groupId = subGroupsRef.push().key.toString()
-            val subGroup = SubGroup( groupId,title.toString(), urlUpload.toString())
+            val subGroup = SubGroup( groupId,title.toString(), urlUpload.toString(), carrera.toString())
                 subGroupsRef.child(carrera.toString()).child(groupId).setValue(subGroup).addOnSuccessListener {
                     subGroupsRef.child(carrera.toString()).child(groupId).child("Miembros").child(user.id).setValue(user)
                     AddUserMemberSubGroup(user, subGroup)
