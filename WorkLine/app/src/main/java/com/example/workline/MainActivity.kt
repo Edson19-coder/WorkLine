@@ -26,9 +26,15 @@ class MainActivity : AppCompatActivity() {
     private fun session() {
         val prefs = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE)
         val email = prefs.getString("email", null)
+        val image = prefs.getString("userImage", null)
+        val carrera = prefs.getString("carrera", null)
+        val name = prefs.getString("name", null)
+        val lastName = prefs.getString("lastName", null)
 
-        if(email != null) {
-            showHome(email)
+        val user = User("", email.toString(), name.toString(), lastName.toString(), carrera.toString(), image.toString())
+
+        if(email != null && image != null && carrera != null && name != null && lastName != null) {
+            showHome(user)
         }
     }
 
@@ -42,9 +48,13 @@ class MainActivity : AppCompatActivity() {
         startActivity(activityRegister)
     }
 
-    private fun showHome(email: String) {
+    private fun showHome(user:User) {
         val activityHome = Intent(this, HomeActivity::class.java).apply {
-            putExtra("email", email)
+            putExtra("userImage", user.image)
+            putExtra("email", user.email)
+            putExtra("carrera", user.carrera)
+            putExtra("name", user.nombre)
+            putExtra("lastName", user.lastName)
         }
         startActivity(activityHome)
     }

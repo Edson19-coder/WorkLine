@@ -31,12 +31,16 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun session() {
-        /*val prefs = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE)
+        val prefs = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE)
         val email = prefs.getString("email", null)
+        val image = prefs.getString("userImage", null)
+        val carrera = prefs.getString("carrera", null)
 
-        if(email != null) {
-            showHome(email)
-        }*/
+        val user = User("", email.toString(), "", "", carrera.toString(), image.toString())
+
+        if(email != null && image != null && carrera != null) {
+            showHome(user)
+        }
     }
 
     private fun setup() {
@@ -69,7 +73,11 @@ class LoginActivity : AppCompatActivity() {
 
     private fun showHome(user:User) {
         val activityHome = Intent(this, HomeActivity::class.java).apply {
+            putExtra("userImage", user.image)
+            putExtra("email", user.email)
             putExtra("carrera", user.carrera)
+            putExtra("name", user.nombre)
+            putExtra("lastName", user.lastName)
         }
         startActivity(activityHome)
     }

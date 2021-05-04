@@ -85,7 +85,11 @@ class RegisterActivity : AppCompatActivity() {
 
     private fun showHome(user:User) {
         val activityHome = Intent(this, HomeActivity::class.java).apply {
+            putExtra("userImage", user.image)
+            putExtra("email", user.email)
             putExtra("carrera", user.carrera)
+            putExtra("name", user.nombre)
+            putExtra("lastName", user.lastName)
         }
         startActivity(activityHome)
     }

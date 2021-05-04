@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
@@ -17,11 +18,15 @@ import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_home.*
+import kotlinx.android.synthetic.main.nav_header.view.*
 
 class HomeActivity : AppCompatActivity() {
 
-    public var email:String = "";
-    var userCarrera = ""
+    private var userImage: String = ""
+    private var userEmail:String = ""
+    private var userCarrera: String = ""
+    private var name: String = ""
+    private var lastName: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,20 +34,43 @@ class HomeActivity : AppCompatActivity() {
 
         val bundle = intent.extras
         userCarrera = bundle?.getString("carrera").toString()
+        userImage = bundle?.getString("userImage").toString()
+        userEmail = bundle?.getString("email").toString()
+        name = bundle?.getString("name").toString()
+        lastName = bundle?.getString("lastName").toString()
+
+        navView.getHeaderView(0).textViewNameHeader.text = name + " " + lastName
+        navView.getHeaderView(0).textViewHeaderEmail.text = userEmail
 
         //GAURDADO DE DATOS
         val prefs = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE).edit()
         prefs.putString("carrera", userCarrera)
+        prefs.putString("userImage", userImage)
+        prefs.putString("email", userEmail)
+        prefs.putString("name", name)
+        prefs.putString("lastName", lastName)
+        prefs.apply()
 
         setCarrera(userCarrera)
 
+        navView.setNavigationItemSelectedListener {
+            when(it.itemId) {
+                R.id.opcCerrar -> {
+                    //BORRAR DATOS
+                    val prefs = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE).edit()
+                    prefs.clear()
+                    prefs.apply()
+
+                    FirebaseAuth.getInstance().signOut()
+                    finish()
+                }
+                R.id.opcEditar -> println("Perfil")
+            }
+            true
+        }
+
         val appBarConfiguration = AppBarConfiguration(setOf(R.id.messagesFragment, R.id.groupsFragment, R.id.tasksFragment))
         bottomNavigationView.setupWithNavController(findNavController(R.id.fragment))
-    }
-
-    private fun showStart() {
-        val activityMain = Intent(this, MainActivity::class.java)
-        startActivity(activityMain)
     }
 
     @JvmName("getCarrera")
