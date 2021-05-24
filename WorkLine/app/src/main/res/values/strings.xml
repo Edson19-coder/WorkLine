@@ -11,4 +11,5 @@
     <string name="hello_world">Hello Square World!</string>
 
     <string name="Permission_denied">Permission denied</string>
+    <string name="title_activity_maps">Map</string>
 </resources>
