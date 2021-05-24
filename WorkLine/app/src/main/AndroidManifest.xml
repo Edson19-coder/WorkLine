@@ -11,7 +11,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.WorkLine">
-        <activity android:name=".AgregarSubGroupActivity"></activity>
+        <activity android:name=".CreateTaskActivity"></activity>
+        <activity android:name=".AgregarSubGroupActivity" />
         <activity android:name=".InSubGroupActivity" />
         <activity android:name=".CreateGroupActivity" />
         <activity android:name=".ChatGroupActivity" />

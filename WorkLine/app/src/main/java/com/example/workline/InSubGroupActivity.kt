@@ -5,7 +5,6 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import com.example.workline.fragments.*
 import com.google.android.material.tabs.TabLayout
-import kotlinx.android.synthetic.main.activity_in_group.*
 import kotlinx.android.synthetic.main.activity_in_sub_group.*
 
 class InSubGroupActivity : AppCompatActivity() {
@@ -33,6 +32,7 @@ class InSubGroupActivity : AppCompatActivity() {
                 when (tab?.position) {
                     0 -> changeFragment(ChantInSubGroupFragment(), "fragmentChatInSubGroup")
                     1 -> changeFragment(MembersInSubGroupFragment(), "fragmentMembersInSubGroup")
+                    2 -> changeFragment(TaskInSubGroupsFragment(), "fragmentTasksInSubGroup")
                 }
             }
 
