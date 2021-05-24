@@ -10,7 +10,8 @@ class Message(
     var nameChat: String = "",
     var emmiterName: String = "",
     var idFriendChat: String = "",
-    var userImage: String = ""
+    var userImage: String = "",
+    var encripted: Boolean = false
 ) {
     @Exclude
     var mine: Boolean = false

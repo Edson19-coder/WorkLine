@@ -12,7 +12,8 @@
         tools:layout="@layout/fragment_messages">
         <action
             android:id="@+id/action_messagesFragment_to_groupsFragment"
-            app:destination="@id/groupsFragment" />
+            app:destination="@id/groupsFragment"
+            app:enterAnim="@anim/from_bottom" />
     </fragment>
     <fragment
         android:id="@+id/groupsFragment"
