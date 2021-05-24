@@ -38,6 +38,8 @@
         <activity
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps"></activity>
+
+        <activity android:name=".CreateTaskActivity"></activity>
         <activity android:name=".AgregarSubGroupActivity" />
         <activity android:name=".InSubGroupActivity" />
         <activity android:name=".CreateGroupActivity" />
