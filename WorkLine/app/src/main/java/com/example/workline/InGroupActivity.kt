@@ -8,11 +8,18 @@ import com.example.workline.fragments.MembersFragment
 import com.example.workline.fragments.MuroFragment
 import com.example.workline.fragments.SubGroupFragment
 import com.google.android.material.tabs.TabLayout
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_in_group.*
 
 class InGroupActivity : AppCompatActivity() {
 
     private var carrera = "LMAD"
+    private val dbrt = FirebaseDatabase.getInstance()
+    private val estadosRef = dbrt.getReference("Estados")
+    private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,6 +29,10 @@ class InGroupActivity : AppCompatActivity() {
         carrera = bundle?.getString("carrera").toString()
 
         textViewTitleGroup.text = carrera
+
+        auth = Firebase.auth
+
+        setEstado("Activo")
 
         imageButton.setOnClickListener {
             finish()
@@ -66,6 +77,28 @@ class InGroupActivity : AppCompatActivity() {
                     .replace(R.id.framentContainer, fragment, tag)
                     .commit()
         }
+    }
+
+    private fun setEstado(estado: String) {
+        estadosRef.child(auth.currentUser.uid).setValue(estado)
+    }
+
+    override fun onResume() {
+
+        //ESTADO ACTIVO
+        setEstado("Activo")
+
+        super.onResume()
+    }
+
+    override fun onPause() {
+
+        //ESTADO INACTIVO
+        if(auth.currentUser != null) {
+            setEstado("Inactivo")
+        }
+
+        super.onPause()
     }
 
     @JvmName("getCarrera")

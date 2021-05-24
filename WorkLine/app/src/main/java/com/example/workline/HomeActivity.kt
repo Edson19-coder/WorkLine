@@ -23,6 +23,9 @@ import android.app.Dialog
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_register.*
 
 class   HomeActivity : AppCompatActivity() {
@@ -35,6 +38,11 @@ class   HomeActivity : AppCompatActivity() {
 
     var estados = arrayOf("Activo","Ocupado","Ausente","Desconectado")
     lateinit var dialog:Dialog
+
+    private lateinit var auth: FirebaseAuth
+    private val db = FirebaseFirestore.getInstance()
+    private val dbrt = FirebaseDatabase.getInstance()
+    private val estadosRef = dbrt.getReference("Estados")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,11 +69,14 @@ class   HomeActivity : AppCompatActivity() {
 
         setCarrera(userCarrera)
 
-        dialog = Dialog(this)
+        auth = Firebase.auth
+
+        setEstado("Activo")
 
         navView.setNavigationItemSelectedListener {
             when(it.itemId) {
                 R.id.opcCerrar -> {
+                    setEstado("Inactivo")
                     //BORRAR DATOS
                     val prefs = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE).edit()
                     prefs.clear()
@@ -90,18 +101,24 @@ class   HomeActivity : AppCompatActivity() {
 
     override fun onResume() {
 
-        //ESTADO INACTIVO
-        println("He vuelto")
+        //ESTADO ACTIVO
+        setEstado("Activo")
 
         super.onResume()
     }
 
     override fun onPause() {
 
-        //ESTADO ACTIVO
-        println("A mimir")
+        //ESTADO INACTIVO
+        if(auth.currentUser != null) {
+            setEstado("Inactivo")
+        }
 
         super.onPause()
+    }
+
+    private fun setEstado(estado: String) {
+        estadosRef.child(auth.currentUser.uid).setValue(estado)
     }
 
     @JvmName("getCarrera")

@@ -39,6 +39,7 @@ class ChatActivity : AppCompatActivity() {
     private val db = FirebaseFirestore.getInstance()
     private val dbrt = FirebaseDatabase.getInstance()
     private val mensajeriaRef = dbrt.getReference("Mensajeria")
+    private val estadosRef = dbrt.getReference("Estados")
     private val listMessage = mutableListOf<Message>()
     private val adapter = MessageInChatAdapter(listMessage)
 
@@ -53,6 +54,9 @@ class ChatActivity : AppCompatActivity() {
         //var friendUserId = "jh9GYTj4lcex7maGRtUY9kQ9I203" //David
         //var friendUserId = "irNUmW0uZTS0K68oYSYtNSwWPFo2" //Osmar
         //var friendUserId = "xNlc1h99vGNMLIsSapFLOjMB8OD2"   //Edson
+
+        getEstado(friendUserId)
+        getUserChat(friendUserId)
 
        btnSendLocation.setOnClickListener {
 
@@ -76,6 +80,9 @@ class ChatActivity : AppCompatActivity() {
             }
             editTextMessage.text.clear()
         }
+
+        setEstado("Activo")
+
         rvChat.adapter = adapter
         getMessages(myUserId, friendUserId)
     }
@@ -277,8 +284,50 @@ class ChatActivity : AppCompatActivity() {
         }
     }
 
+    private fun getEstado(friend: String) {
+        estadosRef.child(friend).addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if(snapshot != null) {
+                    textViewUserEstado.text = "Estado: " + snapshot.value.toString()
+                }
+            }
 
+            override fun onCancelled(error: DatabaseError) {
+                println(error)
+            }
 
+        })
+    }
+
+    private fun getUserChat(friend: String) {
+        db.collection("users").document(friend).get().addOnSuccessListener {
+            if(it != null) {
+                textViewUserChat.text = it.get("name").toString() + " " + it.get("lastName").toString()
+            }
+        }
+    }
+
+    private fun setEstado(estado: String) {
+        estadosRef.child(auth.currentUser.uid).setValue(estado)
+    }
+
+    override fun onResume() {
+
+        //ESTADO ACTIVO
+        setEstado("Activo")
+
+        super.onResume()
+    }
+
+    override fun onPause() {
+
+        //ESTADO INACTIVO
+        if(auth.currentUser != null) {
+            setEstado("Inactivo")
+        }
+
+        super.onPause()
+    }
 }
 
 

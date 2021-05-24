@@ -27,6 +27,7 @@ class ChatGroupActivity : AppCompatActivity() {
     private val db = FirebaseFirestore.getInstance()
     private val dbrt = FirebaseDatabase.getInstance()
     private val mensajeriaGroupRef = dbrt.getReference("MensajeriaMuro")
+    private val estadosRef = dbrt.getReference("Estados")
     private val listMessage = mutableListOf<MessageGroup>()
     private val adapter = MessageGroupInChatAdapter(listMessage)
     private var carrera = "LMAD"
@@ -36,6 +37,8 @@ class ChatGroupActivity : AppCompatActivity() {
 
         val bundle = intent.extras
         carrera = bundle?.getString("carrera").toString()
+
+        setEstado("Activo")
 
         btnSendMessageGroup.setOnClickListener {
             val messageText = editTextMessageGroup.text.toString()
@@ -91,5 +94,27 @@ class ChatGroupActivity : AppCompatActivity() {
 
     private fun insertLastMessage(lastMessage: MessageGroup, group: String) {
         mensajeriaGroupRef.child(group).child("lastMessageGroup").setValue(lastMessage)
+    }
+
+    private fun setEstado(estado: String) {
+        estadosRef.child(auth.currentUser.uid).setValue(estado)
+    }
+
+    override fun onResume() {
+
+        //ESTADO ACTIVO
+        setEstado("Activo")
+
+        super.onResume()
+    }
+
+    override fun onPause() {
+
+        //ESTADO INACTIVO
+        if(auth.currentUser != null) {
+            setEstado("Inactivo")
+        }
+
+        super.onPause()
     }
 }
