@@ -97,7 +97,9 @@ class TaskInSubGroupsFragment : Fragment() {
                     if (snapshot.value != null) {
                         totalPoints = snapshot.value.toString().toInt()
                         if(totalPoints != null) {
-                            textViewTotalPointsUser.text = "Puntos totales: " + totalPoints.toString()
+                            if(totalPoints.toString() != null) {
+                                textViewTotalPointsUser.text = "Puntos totales: " + totalPoints.toString()
+                            }
                         }
                     }
                 }
