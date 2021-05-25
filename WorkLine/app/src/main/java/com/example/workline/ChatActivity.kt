@@ -1,8 +1,11 @@
 package com.example.workline
 
 import android.Manifest
+import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.widget.EditText
@@ -20,7 +23,9 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.activity_chat.*
+import kotlinx.android.synthetic.main.activity_configuration.*
 import org.bouncycastle.jce.provider.BouncyCastleProvider
 import org.bouncycastle.util.encoders.Base64
 import java.io.UnsupportedEncodingException
@@ -42,6 +47,12 @@ class ChatActivity : AppCompatActivity() {
     private val estadosRef = dbrt.getReference("Estados")
     private val listMessage = mutableListOf<Message>()
     private val adapter = MessageInChatAdapter(listMessage)
+    private var myUserId: String = ""
+    private var friendUserId: String = ""
+
+    private var selectedPhotoUri: Uri? = null
+    private var urlUpload: Uri? = null
+    private var mStorage = FirebaseStorage.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,11 +60,8 @@ class ChatActivity : AppCompatActivity() {
         auth = Firebase.auth
         val bundle = intent.extras
         val idFriend = bundle?.getString("idFriend").toString()
-        var myUserId = auth.currentUser.uid
-        var friendUserId = idFriend
-        //var friendUserId = "jh9GYTj4lcex7maGRtUY9kQ9I203" //David
-        //var friendUserId = "irNUmW0uZTS0K68oYSYtNSwWPFo2" //Osmar
-        //var friendUserId = "xNlc1h99vGNMLIsSapFLOjMB8OD2"   //Edson
+        myUserId = auth.currentUser.uid
+        friendUserId = idFriend
 
         getEstado(friendUserId)
         getUserChat(friendUserId)
@@ -61,6 +69,10 @@ class ChatActivity : AppCompatActivity() {
        btnSendLocation.setOnClickListener {
 
             revisarPermisos()
+        }
+
+        btnSendPhoto.setOnClickListener {
+            sendMessage()
         }
 
         btnSendMessage.setOnClickListener {
@@ -73,13 +85,15 @@ class ChatActivity : AppCompatActivity() {
 
 
                     //Insertamos el mensaje en el usuario emisor
-                    insertMessage(myUserId.toString(), friendUserId, mensajoteEncriptadote, myUserId.toString(), emmiterName, true)
+                    insertMessage(myUserId.toString(), friendUserId, mensajoteEncriptadote, myUserId.toString(), emmiterName, true, 0)
                     //Insertamos el mensaje en el usuario remitente
-                    insertMessage(friendUserId, myUserId.toString(), mensajoteEncriptadote, myUserId.toString(), emmiterName, true)
+                    insertMessage(friendUserId, myUserId.toString(), mensajoteEncriptadote, myUserId.toString(), emmiterName, true, 0)
                 }
             }
             editTextMessage.text.clear()
         }
+
+
 
         setEstado("Activo")
 
@@ -87,13 +101,13 @@ class ChatActivity : AppCompatActivity() {
         getMessages(myUserId, friendUserId)
     }
 
-    private fun insertMessage(me: String, friend: String, textMessage: String, emitterId: String, emitterName: String, encriptado: Boolean) {
+    private fun insertMessage(me: String, friend: String, textMessage: String, emitterId: String, emitterName: String, encriptado: Boolean, typeMessage: Int) {
         val sdf = SimpleDateFormat("dd/M/yyyy hh:mm:ss")
         val currentDate = sdf.format(Date())
         db.collection("users").document(friend).get().addOnSuccessListener {
             val user = User(it.get("userName").toString(), it.get("email").toString(), it.get("name").toString(), it.get("lastName").toString(), it.get("carrera").toString(), it.get("image").toString())
 
-            val message = Message(mensajeriaRef.push().key.toString(), textMessage, emitterId.toString(), currentDate, user.nombre + " " + user.lastName, emitterName, friend, user.image)
+            val message = Message(mensajeriaRef.push().key.toString(), textMessage, emitterId.toString(), currentDate, user.nombre + " " + user.lastName, emitterName, friend, user.image, typeMessage, encriptado)
             message.encripted = encriptado
             mensajeriaRef.child(me).child(friend).child(message.id).setValue(message)
             insertLastMessage(me, friend, message)
@@ -219,48 +233,10 @@ class ChatActivity : AppCompatActivity() {
         return null
     }
 
-
-
-
-
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if(resultCode == RESULT_OK){
-        val direccionSeleccionada=data?.getStringExtra("ubicacion")?:""
-            findViewById<EditText>(R.id.editTextMessage).setText(direccionSeleccionada)
-
-        }else{
-
-        }
-        //..
-    }
-
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        if (grantResults.isNotEmpty()) {
-            if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this, "Se requiere aceptar el permiso", Toast.LENGTH_SHORT).show()
-                revisarPermisos()
-            } else {
-                Toast.makeText(this, "Permisio concedido", Toast.LENGTH_SHORT).show()
-                abrirMapa()
-            }
-        }
-    }
-
-
     private fun abrirMapa() {
 
         startActivityForResult(Intent(this,MapsActivity::class.java),1)
     }
-
-
 
     private fun revisarPermisos() {
         // Apartir de Android 6.0+ necesitamos pedir el permiso de ubicacion
@@ -303,6 +279,117 @@ class ChatActivity : AppCompatActivity() {
         db.collection("users").document(friend).get().addOnSuccessListener {
             if(it != null) {
                 textViewUserChat.text = it.get("name").toString() + " " + it.get("lastName").toString()
+            }
+        }
+    }
+
+    private fun sendMessage() {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+        {
+            var boolDo:Boolean =  false
+            if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) ==
+                PackageManager.PERMISSION_DENIED){
+                //permission denied
+                val permissions = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
+                //show popup to request runtime permission
+                requestPermissions(permissions, 1001)
+            }
+            else{
+                //permission already granted
+                boolDo =  true
+
+            }
+
+
+            if(boolDo == true){
+                pickImageFromGallery()
+            }
+
+        }
+
+    }
+
+    private fun pickImageFromGallery() {
+        //Abrir la galería
+        val intent  =  Intent()
+        intent.setAction(Intent.ACTION_PICK);
+        intent.type = "image/*"
+        startActivityForResult(intent, 1000)
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        when(requestCode){
+            1001 -> {
+                if (grantResults.size >0 && grantResults[0] ==
+                    PackageManager.PERMISSION_GRANTED){
+                    //permission from popup granted
+                    pickImageFromGallery()
+                }
+                else{
+                    //PERMISO DENEGADO
+                    Toast.makeText(this, "Permiso denegado", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            1 -> {
+                if (grantResults.isNotEmpty()) {
+                    if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                        Toast.makeText(this, "Se requiere aceptar el permiso", Toast.LENGTH_SHORT).show()
+                        revisarPermisos()
+                    } else {
+                        Toast.makeText(this, "Permisio concedido", Toast.LENGTH_SHORT).show()
+                        abrirMapa()
+                    }
+                }
+            }
+        }
+    }
+
+    override fun onActivityResult(requestcode: Int, resultcode: Int, data: Intent?) {
+        super.onActivityResult(requestcode, resultcode, intent)
+
+        if (resultcode == Activity.RESULT_OK) {
+
+            if(requestcode == 1000) {
+                selectedPhotoUri = data?.data
+                saveImage()
+            }
+
+            if(requestcode == 1) {
+                if(resultcode == RESULT_OK){
+                    val direccionSeleccionada=data?.getStringExtra("ubicacion")?:""
+                    findViewById<EditText>(R.id.editTextMessage).setText(direccionSeleccionada)
+
+                }else{
+
+                }
+            }
+        }
+    }
+
+    private fun saveImage() {
+
+        if(selectedPhotoUri == null) return
+        val filename = UUID.randomUUID().toString()
+        val ref = mStorage.getReference("/chatImage/$filename")
+        ref.putFile(selectedPhotoUri!!).addOnSuccessListener {
+            Log.d("AddImage", "Success upload image from group: ${it.metadata?.path}")
+            ref.downloadUrl.addOnSuccessListener {
+                Log.d("AddImage", "File location: $it")
+                urlUpload = it
+                if(urlUpload != null) {
+                    if(myUserId.isNotEmpty() && friendUserId.isNotEmpty()) {
+                        db.collection("users").document(myUserId).get().addOnSuccessListener {
+                            val emmiterName = it.get("name").toString() + " " + it.get("lastName").toString()
+
+
+                            //Insertamos el mensaje en el usuario emisor
+                            insertMessage(myUserId.toString(), friendUserId, urlUpload.toString(), myUserId.toString(), emmiterName, false, 1)
+                            //Insertamos el mensaje en el usuario remitente
+                            insertMessage(friendUserId, myUserId.toString(), urlUpload.toString(), myUserId.toString(), emmiterName, false, 1)
+                        }
+                    }
+                }
             }
         }
     }

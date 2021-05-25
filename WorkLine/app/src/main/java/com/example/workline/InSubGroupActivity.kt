@@ -18,6 +18,7 @@ class InSubGroupActivity : AppCompatActivity() {
     private val dbrt = FirebaseDatabase.getInstance()
     private val estadosRef = dbrt.getReference("Estados")
     private lateinit var auth: FirebaseAuth
+    private var nameGroup: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,7 +27,7 @@ class InSubGroupActivity : AppCompatActivity() {
         val bundle = intent.extras
         idSubGroup = bundle?.getString("idSubGroup").toString()
         idGroup = bundle?.getString("groupId").toString()
-        val nameGroup = bundle?.getString("nameGroup").toString()
+        nameGroup = bundle?.getString("nameGroup").toString()
 
         textViewUserChat.text = nameGroup
 
@@ -103,5 +104,10 @@ class InSubGroupActivity : AppCompatActivity() {
     @JvmName("getIdGroup")
     fun getGroup(): String {
         return idGroup
+    }
+
+    @JvmName("getNameSubGroup")
+    fun getNameSubGroup(): String {
+        return nameGroup
     }
 }
