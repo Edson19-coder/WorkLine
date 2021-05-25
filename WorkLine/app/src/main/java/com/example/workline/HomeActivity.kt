@@ -20,9 +20,16 @@ import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.nav_header.view.*
 import android.app.Dialog
+import android.net.Uri
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
+import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.activity_configuration.*
 import kotlinx.android.synthetic.main.activity_register.*
 
 class   HomeActivity : AppCompatActivity() {
@@ -36,9 +43,26 @@ class   HomeActivity : AppCompatActivity() {
     var estados = arrayOf("Activo","Ocupado","Ausente","Desconectado")
     lateinit var dialog:Dialog
 
+    private lateinit var auth: FirebaseAuth
+    private val db = FirebaseFirestore.getInstance()
+    private val dbrt = FirebaseDatabase.getInstance()
+    private val estadosRef = dbrt.getReference("Estados")
+
+    private val chatsRef = dbrt.getReference("Mensajeria")
+    private val muroRef = dbrt.getReference("MensajeriaMuro")
+    private val subGruposRef = dbrt.getReference("SubGrupos")
+    private val tareasUsuariosRef = dbrt.getReference("TareasUsuarios")
+    private val usSubGruposRef = dbrt.getReference("UsuariosSubGroup")
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
+
+        chatsRef.keepSynced(true)
+        muroRef.keepSynced(true)
+        subGruposRef.keepSynced(true)
+        usSubGruposRef.keepSynced(true)
+        tareasUsuariosRef.keepSynced(true)
 
         val bundle = intent.extras
         userCarrera = bundle?.getString("carrera").toString()
@@ -49,6 +73,7 @@ class   HomeActivity : AppCompatActivity() {
 
         navView.getHeaderView(0).textViewNameHeader.text = name + " " + lastName
         navView.getHeaderView(0).textViewHeaderEmail.text = userEmail
+        Picasso.get().load(Uri.parse(userImage)).into(navView.getHeaderView(0).imageViewHeader)
 
         //GAURDADO DE DATOS
         val prefs = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE).edit()
@@ -61,11 +86,14 @@ class   HomeActivity : AppCompatActivity() {
 
         setCarrera(userCarrera)
 
-        dialog = Dialog(this)
+        auth = Firebase.auth
+
+        setEstado("Activo")
 
         navView.setNavigationItemSelectedListener {
             when(it.itemId) {
                 R.id.opcCerrar -> {
+                    setEstado("Inactivo")
                     //BORRAR DATOS
                     val prefs = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE).edit()
                     prefs.clear()
@@ -76,32 +104,40 @@ class   HomeActivity : AppCompatActivity() {
                     FirebaseAuth.getInstance().signOut()
                     finish()
                 }
-                R.id.opcEstado -> {
-
+                R.id.opcEditar -> {
+                    val activityIntent = Intent(this, ConfigurationActivity::class.java)
+                    this.startActivity(activityIntent)
                 }
-                R.id.opcEditar -> println("Perfil")
             }
             true
         }
 
-        val appBarConfiguration = AppBarConfiguration(setOf(R.id.messagesFragment, R.id.groupsFragment, R.id.tasksFragment))
+        val appBarConfiguration = AppBarConfiguration(setOf(R.id.messagesFragment, R.id.groupsFragment))
         bottomNavigationView.setupWithNavController(findNavController(R.id.fragment))
     }
 
     override fun onResume() {
 
-        //ESTADO INACTIVO
-        println("He vuelto")
+        //ESTADO ACTIVO
+        setEstado("Activo")
 
         super.onResume()
     }
 
     override fun onPause() {
 
-        //ESTADO ACTIVO
-        println("A mimir")
+        //ESTADO INACTIVO
+        if(auth.currentUser != null) {
+            setEstado("Inactivo")
+        }
 
         super.onPause()
+    }
+
+    private fun setEstado(estado: String) {
+        if(auth.currentUser != null ){
+            estadosRef.child(auth.currentUser.uid).setValue(estado)
+        }
     }
 
     @JvmName("getCarrera")

@@ -11,6 +11,7 @@ class Message(
     var emmiterName: String = "",
     var idFriendChat: String = "",
     var userImage: String = "",
+    var typeMessage: Int = 0,
     var encripted: Boolean = false
 ) {
     @Exclude

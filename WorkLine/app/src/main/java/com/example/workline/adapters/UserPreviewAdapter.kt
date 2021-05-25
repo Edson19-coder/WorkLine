@@ -25,7 +25,9 @@ class UserPreviewAdapter (val context: FragmentActivity?, val members: MutableLi
         fun setData(member: UserPreview) {
             auth = Firebase.auth
 
-            Picasso.get().load(member.urlImage).into(itemView.imageViewUserPreview)
+            if(member.urlImage != null && member.urlImage != "") {
+                Picasso.get().load(member.urlImage).into(itemView.imageViewUserPreview)
+            }
             itemView.TextViewNameUser.text = member.name
 
             itemView.idFLUserPreview.setOnClickListener {

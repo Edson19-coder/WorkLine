@@ -9,8 +9,4 @@
         android:id="@+id/groupsFragment"
         android:title="Grupos"
         android:icon="@drawable/ic_outline_groups_24"/>
-    <item
-        android:id="@+id/tasksFragment"
-        android:title="Tareas"
-        android:icon="@drawable/ic_outline_backpack_24"/>
 </menu>

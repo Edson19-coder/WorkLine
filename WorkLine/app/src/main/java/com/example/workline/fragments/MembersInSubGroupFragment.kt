@@ -7,10 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.workline.AgregarSubGroupActivity
-import com.example.workline.ChatActivity
-import com.example.workline.InSubGroupActivity
-import com.example.workline.R
+import com.example.workline.*
 import com.example.workline.adapters.UserPreviewAdapter
 import com.example.workline.modelos.MessageSubGroup
 import com.example.workline.modelos.User
@@ -55,6 +52,13 @@ class MembersInSubGroupFragment : Fragment() {
             context?.startActivity(activityIntent)
         }
 
+        rootView.btnEnviarEmailSubGroup.setOnClickListener {
+            val  activityIntent =  Intent(context, CorreoActivity::class.java)
+            activityIntent.putExtra("idSubGroup", idSubGroup)
+            activityIntent.putExtra("idGroup", idGroup)
+            context?.startActivity(activityIntent)
+        }
+
         getMembers()
         return rootView
     }
@@ -72,7 +76,7 @@ class MembersInSubGroupFragment : Fragment() {
             }
 
             override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
+                println(error)
             }
 
         })

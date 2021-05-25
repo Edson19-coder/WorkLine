@@ -32,11 +32,6 @@ import java.security.InvalidKeyException
 import java.security.NoSuchAlgorithmException
 import org.bouncycastle.jce.provider.BouncyCastleProvider
 
-/**
- * A simple [Fragment] subclass.
- * Use the [MessagesFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class MessagesFragment : Fragment() {
 
     private lateinit var auth: FirebaseAuth
@@ -60,6 +55,7 @@ class MessagesFragment : Fragment() {
         rootView = inflater.inflate(R.layout.fragment_messages, container, false)
         adapter = MessageAdapter(activity, listLastMessageChat)
         rootView.rvMessage.adapter = adapter
+
         getChats()
         return rootView
     }

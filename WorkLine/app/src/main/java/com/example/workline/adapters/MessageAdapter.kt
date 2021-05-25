@@ -33,10 +33,19 @@ class MessageAdapter(val context: FragmentActivity?, val messages: MutableList<M
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun setData(message: Message) {
             auth = Firebase.auth
-            if(message.emitter.equals(auth.uid))
-                itemView.groupTextView.text = "Tu: " + message.content
-            else
-                itemView.groupTextView.text = message.content
+            if(message.emitter.equals(auth.uid)){
+                if(message.typeMessage == 1) {
+                    itemView.groupTextView.text = "Tu: Has envaido una imagen"
+                } else {
+                    itemView.groupTextView.text = "Tu: " + message.content
+                }
+            } else {
+                if(message.typeMessage == 1) {
+                    itemView.groupTextView.text = "Ha enviado una imagen"
+                } else {
+                    itemView.groupTextView.text = message.content
+                }
+            }
             itemView.textViewDateSend.text = message.created_at
             itemView.titleTextView.text = message.nameChat
             if(message.userImage != "" && message.userImage != null)

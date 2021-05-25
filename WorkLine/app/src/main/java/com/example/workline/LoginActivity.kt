@@ -46,7 +46,7 @@ class LoginActivity : AppCompatActivity() {
     private fun setup() {
         title = "Ingresar"
 
-        btnLoginEntrar.setOnClickListener {
+        btnSendEmail.setOnClickListener {
             if(editTextLoginEmail.text.isNotEmpty() && editTextLoginPassword.text.isNotEmpty()) {
                 auth = Firebase.auth
                 auth.signInWithEmailAndPassword(editTextLoginEmail.text.toString(), editTextLoginPassword.text.toString())
