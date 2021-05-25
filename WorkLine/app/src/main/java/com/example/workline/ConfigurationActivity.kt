@@ -58,7 +58,9 @@ class ConfigurationActivity : AppCompatActivity() {
                 editTextTextPersonName3.setText(user!!.lastName)
                 editTextTextPersonName4.setText(user!!.userName)
                 editTextTextPersonName5.setText(user!!.email)
-                Picasso.get().load(Uri.parse(user!!.image)).into(imgProfileActivity)
+                if(user!!.image != "") {
+                    Picasso.get().load(Uri.parse(user!!.image)).into(imgProfileActivity)
+                }
             }
         }
     }

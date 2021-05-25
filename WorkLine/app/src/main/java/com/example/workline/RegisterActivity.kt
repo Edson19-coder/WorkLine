@@ -62,7 +62,8 @@ class RegisterActivity : AppCompatActivity() {
                                         "name" to editTextRegisterName.text.toString(),
                                         "lastName" to editTextRegisterApellidos.text.toString(),
                                         "email" to editTextRegisterEmail.text.toString(),
-                                        "carrera" to carrera
+                                        "carrera" to carrera,
+                                        "image" to "https://firebasestorage.googleapis.com/v0/b/proyecto-poi.appspot.com/o/images%2Fguest.png?alt=media&token=8874ca5d-5f52-45ca-8b21-b485912279d8"
                                     )
                                 ).addOnCompleteListener {
                                     if(task.isSuccessful) {

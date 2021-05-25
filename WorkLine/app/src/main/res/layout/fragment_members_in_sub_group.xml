@@ -6,23 +6,38 @@
     android:layout_height="match_parent"
     tools:context=".fragments.MembersInSubGroupFragment">
 
+    <Button
+        android:id="@+id/btnEnviarEmailSubGroup"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="ENVIAR CORREO"
+        app:cornerRadius="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/btnAgregarUsuario"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvMembersSubGroup"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintBottom_toTopOf="@+id/btnAgregarUsuario"
+        app:layout_constraintBottom_toTopOf="@+id/btnEnviarEmailSubGroup"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
         tools:listitem="@layout/user_element" />
 
     <Button
         android:id="@+id/btnAgregarUsuario"
         android:layout_width="0dp"
         android:layout_height="60dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
         android:text="Añadir usuario"
         app:cornerRadius="20dp"
         app:layout_constraintBottom_toBottomOf="parent"

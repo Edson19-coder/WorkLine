@@ -93,10 +93,12 @@ class TaskInSubGroupsFragment : Fragment() {
     private fun getTotalPoinst() {
         refTaskUsers.child(auth.currentUser.uid).child(idSubGroup).child("PuntosTotales").addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                if (snapshot != null) {
-                    totalPoints = snapshot.value.toString().toInt()
-                    if(totalPoints != null) {
-                        textViewTotalPointsUser.text = "Puntos totales: " + totalPoints.toString()
+                if(snapshot != null) {
+                    if (snapshot.value != null) {
+                        totalPoints = snapshot.value.toString().toInt()
+                        if(totalPoints != null) {
+                            textViewTotalPointsUser.text = "Puntos totales: " + totalPoints.toString()
+                        }
                     }
                 }
             }

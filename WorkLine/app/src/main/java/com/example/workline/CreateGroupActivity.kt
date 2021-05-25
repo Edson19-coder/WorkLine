@@ -13,7 +13,6 @@ import android.widget.Toast
 import com.example.workline.Data.IMAGE_PICK_CODE
 import com.example.workline.Data.PERMISSION_CODE
 import com.example.workline.modelos.SubGroup
-import com.example.workline.modelos.User
 import com.example.workline.modelos.UserPreview
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -44,7 +43,7 @@ class CreateGroupActivity : AppCompatActivity() {
         val bundle = intent.extras
         carrera = bundle?.getString("carrera").toString()
 
-        imageButtonCreateGroup.setOnClickListener {
+        imageButtonCorreo.setOnClickListener {
             finish()
         }
 
@@ -89,7 +88,7 @@ class CreateGroupActivity : AppCompatActivity() {
         auth = Firebase.auth
         db.collection("users").document(auth.currentUser.uid).get().addOnSuccessListener {
             it.id
-            val user = UserPreview(it.id.toString(), it.get("name").toString() + " " + it.get("lastName").toString(), "")
+            val user = UserPreview(it.id.toString(), it.get("name").toString() + " " + it.get("lastName").toString(), it.get("image").toString())
             val groupId = subGroupsRef.push().key.toString()
             val subGroup = SubGroup( groupId,title.toString(), urlUpload.toString(), carrera.toString())
                 subGroupsRef.child(carrera.toString()).child(groupId).setValue(subGroup).addOnSuccessListener {

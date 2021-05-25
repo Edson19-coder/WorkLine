@@ -77,17 +77,24 @@ class ChatActivity : AppCompatActivity() {
 
         btnSendMessage.setOnClickListener {
             val textMessage = editTextMessage.text.toString()
-            val mensajoteEncriptadote = encrypt(textMessage, "662ede816988e58fb6d057d9d85605e0").toString()
 
-            if(myUserId.toString().isNotEmpty() && friendUserId.toString().isNotEmpty() && mensajoteEncriptadote.isNotEmpty()) {
+
+            if(myUserId.toString().isNotEmpty() && friendUserId.toString().isNotEmpty() && textMessage.isNotEmpty()) {
                 db.collection("users").document(myUserId).get().addOnSuccessListener {
                     val emmiterName = it.get("name").toString() + " " + it.get("lastName").toString()
 
-
-                    //Insertamos el mensaje en el usuario emisor
-                    insertMessage(myUserId.toString(), friendUserId, mensajoteEncriptadote, myUserId.toString(), emmiterName, true, 0)
-                    //Insertamos el mensaje en el usuario remitente
-                    insertMessage(friendUserId, myUserId.toString(), mensajoteEncriptadote, myUserId.toString(), emmiterName, true, 0)
+                    if(checkBoxEncriptacion.isChecked) {
+                        val mensajoteEncriptadote = encrypt(textMessage, "662ede816988e58fb6d057d9d85605e0").toString()
+                        //Insertamos el mensaje en el usuario emisor
+                        insertMessage(myUserId.toString(), friendUserId, mensajoteEncriptadote, myUserId.toString(), emmiterName, true, 0)
+                        //Insertamos el mensaje en el usuario remitente
+                        insertMessage(friendUserId, myUserId.toString(), mensajoteEncriptadote, myUserId.toString(), emmiterName, true, 0)
+                    } else {
+                        //Insertamos el mensaje en el usuario emisor
+                        insertMessage(myUserId.toString(), friendUserId, textMessage, myUserId.toString(), emmiterName, false, 0)
+                        //Insertamos el mensaje en el usuario remitente
+                        insertMessage(friendUserId, myUserId.toString(), textMessage, myUserId.toString(), emmiterName, false, 0)
+                    }
                 }
             }
             editTextMessage.text.clear()

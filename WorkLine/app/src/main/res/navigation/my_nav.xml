@@ -19,14 +19,5 @@
         android:id="@+id/groupsFragment"
         android:name="com.example.workline.fragments.GroupsFragment"
         android:label="fragment_groups"
-        tools:layout="@layout/fragment_groups">
-        <action
-            android:id="@+id/action_groupsFragment_to_tasksFragment"
-            app:destination="@id/tasksFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/tasksFragment"
-        android:name="com.example.workline.fragments.TasksFragment"
-        android:label="fragment_tasks"
-        tools:layout="@layout/fragment_tasks" />
+        tools:layout="@layout/fragment_groups"/>
 </navigation>

@@ -104,9 +104,6 @@ class   HomeActivity : AppCompatActivity() {
                     FirebaseAuth.getInstance().signOut()
                     finish()
                 }
-                R.id.opcEstado -> {
-
-                }
                 R.id.opcEditar -> {
                     val activityIntent = Intent(this, ConfigurationActivity::class.java)
                     this.startActivity(activityIntent)
@@ -115,7 +112,7 @@ class   HomeActivity : AppCompatActivity() {
             true
         }
 
-        val appBarConfiguration = AppBarConfiguration(setOf(R.id.messagesFragment, R.id.groupsFragment, R.id.tasksFragment))
+        val appBarConfiguration = AppBarConfiguration(setOf(R.id.messagesFragment, R.id.groupsFragment))
         bottomNavigationView.setupWithNavController(findNavController(R.id.fragment))
     }
 
