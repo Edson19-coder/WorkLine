@@ -93,13 +93,16 @@ class TaskActivity : AppCompatActivity() {
     private fun validTaskSend() {
         refTaskUsers.child(auth.currentUser.uid).child(idSubGroup).child(idTask).child("Entregado").addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                isSent = snapshot.value as Boolean
-                if(isSent == true) {
-                    textViewMessageSent.visibility = View.VISIBLE
-                    btnEntregar.visibility = View.INVISIBLE
-                } else {
-                    textViewMessageSent.visibility = View.INVISIBLE
-                    btnEntregar.visibility = View.VISIBLE
+
+                if(isSent != null) {
+                    isSent = snapshot.value as Boolean
+                    if(isSent == true) {
+                        textViewMessageSent.visibility = View.VISIBLE
+                        btnEntregar.visibility = View.INVISIBLE
+                    } else {
+                        textViewMessageSent.visibility = View.INVISIBLE
+                        btnEntregar.visibility = View.VISIBLE
+                    }
                 }
             }
 
